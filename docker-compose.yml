@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:16
@@ -21,11 +19,30 @@ services:
       - "8069:8069"
     env_file:
       - .env
+    environment:
+      - ODOO_DB_HOST=${ODOO_DB_HOST}
+      - ODOO_DB_PORT=${ODOO_DB_PORT}
+      - ODOO_DB_USER=${POSTGRES_USER}
+      - ODOO_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - ODOO_ADMIN_PASSWD=${ODOO_ADMIN_PASSWD}
     volumes:
       - ./addons:/mnt/extra-addons
-      - ./config/odoo.conf:/etc/odoo/odoo.conf
       - odoo-data:/var/lib/odoo
-    command: [ "odoo", "-c", "/etc/odoo/odoo.conf" ]
+    command: |
+      bash -lc "
+      set -e
+      cat >/etc/odoo/odoo.conf <<EOF
+      [options]
+      admin_passwd = ${ODOO_ADMIN_PASSWD}
+      db_host = ${ODOO_DB_HOST}
+      db_port = ${ODOO_DB_PORT}
+      db_user = ${POSTGRES_USER}
+      db_password = ${POSTGRES_PASSWORD}
+      addons_path = /usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
+      list_db = True
+      EOF
+      exec odoo -c /etc/odoo/odoo.conf
+      "
     restart: unless-stopped
 
 volumes:

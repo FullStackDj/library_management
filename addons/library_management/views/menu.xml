@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem id="menu_library_root" name="Бібліотека"/>
+    <menuitem id="menu_library_books" name="Книги" parent="menu_library_root" action="action_library_book"/>
+    <menuitem id="menu_library_rents" name="Видачі" parent="menu_library_root" action="action_library_rent"/>
+    <menuitem id="menu_library_contacts" name="Користувачі" parent="menu_library_root"
+              action="contacts.action_contacts"/>
+</odoo>
