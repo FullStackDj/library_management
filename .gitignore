@@ -1,0 +1,11 @@
+.idea
+
+.env
+
+*.log
+*.pid
+*.pyc
+__pycache__/
+
+db-data/
+odoo-data/
